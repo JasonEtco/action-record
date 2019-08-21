@@ -15,24 +15,16 @@
 
 ActionRecord works by running JavaScript functions in the repository to decide how and where to store the provided raw data.
 
-Including it should be as simple as using the action in your `.github/workflows` file:
+Including it should be as simple as using the action in your `.github/workflows` file with the `GITHUB_TOKEN` secret:
 
 ```yaml
 steps:
-  - use: JasonEtco/action-record
+  - uses: JasonEtco/action-record
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 This will tell ActionRecord to run a JavaScript file called `/action-record/events/<EVENT>.js`, where `EVENT` is the the event name that triggered the workflow.
-
-You can override this by passing key/value pairs of `EVENT:FILENAME`
-
-```yaml
-steps:
-  - use: JasonEtco/action-record
-    with:
-      events:
-        issues: on-new-issue.js
-```
 
 ## Your JavaScript files
 
@@ -44,16 +36,15 @@ module.exports = action => {
 }
 ```
 
-An example use-case is to store arbitrary data as issues, categorized by labels. For example, we can create a new issue with the label `user` to store a new user.
+An example use-case is to store arbitrary data as issues, categorized by labels. For example, we can create a new issue with the label `user` to store any new user that pushes to a repo. We do this by defining a `user` model, and then using typical ORM methods in our specific event handler. ActionRecord will load all models from `action-record/models` before running the event handler, and put them onto `action.models`.
 
 ```js
 // action-record/models/user.js
-const { defineModel } = require('action-record')
 const Joi = require('@hapi/joi')
 module.exports = {
   name: 'user',
   schema: {
-    login: Joi.string()
+    login: Joi.string().metadata({ unique: true })
   }
 }
 
@@ -79,7 +70,7 @@ module.exports = action => {
   await action.models.user.create({ login: 'JasonEtco' })
   const record = await action.models.user.findOne({ login: 'JasonEtco' })
   console.log(record)
-  // -> { login: 'JasonEtco' }
+  // -> { login: 'JasonEtco', created_at: 1566405542797, action_record_id: '085aed5c-deac-4d57-bcd3-94fc10b9c50f', issue_number: 1 }
 }
 ```
 
@@ -87,11 +78,11 @@ module.exports = action => {
 
 ```yml
 steps:
-  - use: JasonEtco/action-record
+  - uses: JasonEtco/action-record
+    env:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     with:
       baseDir: action-record
-      events:
-        event: file
 ```
 
 
