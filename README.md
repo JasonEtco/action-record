@@ -6,7 +6,7 @@
 
 
 <p align="center">
-  📑 An "ORM" for storing/reading data to/from a GitHub repository using GitHub Actions<br>
+  📑 An "ORM" for storing data in a GitHub repository using GitHub Actions<br>
   <a href="#usage">Usage</a> •
   <a href="#faq">FAQ</a>
 </p>
