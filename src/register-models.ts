@@ -5,7 +5,7 @@ import github from '@actions/github'
 import colorHash from 'color-hash'
 import ActionRecord from './action-record'
 import octokit from './octokit'
-import Model from './model'
+import Model, { ModelInput } from './model'
 
 /**
  * Create a label in the repo for the given model if
@@ -34,8 +34,13 @@ export async function registerModels (actionRecord: ActionRecord) {
   const modelFiles = fs.readdirSync(modelsDir)
 
   return Promise.all(modelFiles.map(async modelFile => {
-    const model = require(path.join(modelsDir, modelFile))
+    // Require the exported object
+    const model = require(path.join(modelsDir, modelFile)) as ModelInput
+    
+    // Create the model label
     await createModelLabel(model.name)
-    actionRecord.models[model.name] = new Model(model.name, model.schema)
+
+    // Add it to the ActionRecord class
+    actionRecord.models[model.name] = new Model(model)
   }))
 }

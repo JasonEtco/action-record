@@ -1,18 +1,22 @@
 import github from '@actions/github'
-import Joi from '@hapi/joi'
+import { Schema } from '@hapi/joi'
+import { IssuesCreateResponse } from '@octokit/rest'
 import uuid from 'uuid'
 import octokit from './octokit'
 import Instance from './instance'
 
+export interface ModelInput {
+  name: string
+  schema: Schema
+  hooks: Hooks
+}
 export default class Model {
   public name: string
-  public schema: Joi
-  public validate: Joi.validate
+  public schema: Schema
 
-  constructor (name: string, schema: Joi) {
-    this.name = name
-    this.schema = schema
-    this.validate = schema.validate
+  constructor (model: ModelInput) {
+    this.name = model.name
+    this.schema = model.schema
   }
 
   /**
@@ -26,7 +30,7 @@ export default class Model {
   /**
    * Call the search API to return all issues with this model's label.
    */
-  private async searchForIssues () {
+  private async searchForIssues (): Promise<IssuesCreateResponse[]> {
     // Search for issues by this label
     const issues = await octokit.search.issuesAndPullRequests({
       q: `is:issue label:${this.name}`
