@@ -49,8 +49,9 @@ An example use-case is to store arbitrary data as issues, categorized by labels.
 ```js
 // action-record/models/user.js
 const ActionRecord = require('action-record')
+const Joi = require('@hapi/joi')
 module.exports = await ActionRecord.defineModel('User', {
-  login: String
+  login: Joi.string()
 })
 
 // action-record/events/push.js
