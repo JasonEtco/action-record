@@ -22,7 +22,7 @@ export async function createModelLabel (name: string) {
 }
 
 export async function registerModels (actionRecord: ActionRecord) {
-  const baseDir = core.getInput('baseDir') || 'action-record'
+  const baseDir = core.getInput('baseDir')
   const modelsDir = path.join(baseDir, 'models')
   const modelFiles = fs.readdirSync(modelsDir)
 
