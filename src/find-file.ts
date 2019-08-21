@@ -2,6 +2,9 @@ import fs from 'fs'
 import path from 'path'
 import core from '@actions/core'
 
+/**
+ * Checks if the provided argument is a function
+ */
 function isFunction (functionToCheck: Function) {
   return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
  }
