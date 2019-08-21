@@ -1,12 +1,13 @@
-import * as core from '@actions/core';
+import core from '@actions/core'
+import runEvent from './run-event'
 
-async function run() {
+async function run () {
   try {
-    const myInput = core.getInput('myInput');
-    core.debug(`Hello ${myInput}`);
+    core.debug('Running event')
+    await runEvent()
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(error.message)
   }
 }
 
-run();
+run()
