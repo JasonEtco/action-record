@@ -69,6 +69,20 @@ This will create a new issue with a label `user`:
 
 <IMAGE OF NEW `USER` ISSUE>
 
+## Querying for data
+
+Need to query your "database"? No problem! Like most ORMs, each model gets `findOne` and `findAll` methods. These take an object argument to do some basic filtering.
+
+```js
+// action-record/events/push.js
+module.exports = action => {
+  await action.models.user.create({ login: 'JasonEtco' })
+  const record = await action.models.user.findOne({ login: 'JasonEtco' })
+  console.log(record)
+  // -> { login: 'JasonEtco' }
+}
+```
+
 ### Options
 
 ```yml
