@@ -5,18 +5,32 @@ import uuid from 'uuid'
 import octokit from './octokit'
 import Instance from './instance'
 
+type HookFn = (opts: any) => Promise<void>
+
+interface Hooks {
+  beforeValidate?: HookFn
+  afterValidate?: HookFn
+  beforeCreate?: HookFn
+  afterCreate?: HookFn
+  beforeSave?: HookFn
+  afterSave?: HookFn
+}
+
 export interface ModelInput {
   name: string
   schema: Schema
   hooks: Hooks
 }
+
 export default class Model {
   public name: string
   public schema: Schema
+  public hooks: Hooks
 
   constructor (model: ModelInput) {
     this.name = model.name
     this.schema = model.schema
+    this.hooks = model.hooks
   }
 
   /**
