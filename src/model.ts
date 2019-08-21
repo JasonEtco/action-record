@@ -1,4 +1,6 @@
+import github from '@actions/github'
 import Joi from '@hapi/joi'
+import uuid from 'uuid'
 import octokit from './octokit'
 import Instance from './instance'
 
@@ -38,5 +40,29 @@ export default class Model {
     const whereStr = this.whereToStr(where)
     const found = issues.filter(issue => (issue.body as string).includes(whereStr))
     return found.map(item => new Instance(item))
+  }
+
+  async create (opts: any): Promise<Instance> {
+    // Validate the provided object against the model's schema
+    await this.schema.validate(opts)
+
+    // Generate a UUID
+    const id = uuid.v4()
+
+    // Create the new issue
+    const newIssue = await octokit.issues.create({
+      ...github.context.repo,
+      title: `[${this.name}]: ${id}`,
+      body: JSON.stringify(opts, null, 2),
+      labels: [this.name]
+    })
+
+    // Return the new instance
+    return new Instance({
+      action_record_id: id,
+      created_at: newIssue.data.created_at,
+      issue_number: newIssue.data.number,
+      ...opts
+    })
   }
 }

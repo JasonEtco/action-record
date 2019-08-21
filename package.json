@@ -23,7 +23,8 @@
     "@actions/core": "^1.0.0",
     "@actions/github": "^1.0.0",
     "@hapi/joi": "^15.1.1",
-    "color-hash": "^1.0.3"
+    "color-hash": "^1.0.3",
+    "uuid": "^3.3.3"
   },
   "devDependencies": {
     "@types/jest": "^24.0.13",
