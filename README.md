@@ -26,9 +26,9 @@ steps:
 
 This will tell ActionRecord to run a JavaScript file called `/action-record/events/<EVENT>.js`, where `EVENT` is the the event name that triggered the workflow.
 
-## Your JavaScript files
+## Event handlers
 
-These should all export a function that takes one argument, an instance of the [ActionRecord class]():
+These should be JavaScript files that export a function that takes one argument, an instance of the [ActionRecord class](./src/action-record.ts):
 
 ```js
 module.exports = action => {
@@ -74,6 +74,40 @@ module.exports = action => {
 }
 ```
 
+### Models
+
+Models function similar to any other ORM; they require a name and a schema, and can define "hooks":
+
+```js
+// action-record/models/user.js
+module.exports = {
+  name: 'user'
+  // A Joi schema that will be run to validate any new records
+  schema: {
+    login: Joi
+      .string()
+      .metadata({ unique: true })
+  },
+  hooks: {
+    beforeCreate: async candidateRecord => {},
+    afterCreate: async newRecord => {}
+  }
+}
+```
+
+#### Available hooks
+
+Here's a list of all of the available hooks, in the order in which they run:
+
+```
+beforeCreate
+beforeValidate
+afterValidate
+beforeSave
+afterSave
+afterCreate
+```
+
 ### Options
 
 ```yml
@@ -91,3 +125,7 @@ steps:
 **Should I use this in producti-**
 
 **No.** This was made as an experiment - there are far too many reasons not to actually use this. But, if you choose to, awesome!
+
+**This is dumb. You shouldn't use GitHub or Actions as a datastore.**
+
+Yes. That isn't a question, but I don't disagree. The point of this is to show that we _can_, not that we should.
