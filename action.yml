@@ -6,5 +6,5 @@ inputs:
     description: 'The base directory of the ActionRecord files'
     default: 'action-record'
 runs:
-  using: 'node12'
-  main: 'lib/main.js'
+  using: 'docker'
+  image: 'Dockerfile'
