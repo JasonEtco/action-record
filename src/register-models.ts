@@ -26,7 +26,7 @@ export async function createModelLabel (name: string) {
   }
 }
 
-type ModelFn = ({ Joi: Joi }) => ModelInput
+type ModelFn = (opts: { Joi: typeof Joi }) => ModelInput
 
 /**
  * Register all models in the `baseDir/models` folder.
