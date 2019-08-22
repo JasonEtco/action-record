@@ -34,12 +34,17 @@ type ModelFn = (opts: { Joi: typeof Joi }) => ModelInput
 export async function registerModels (actionRecord: ActionRecord) {
   const cwd = process.env.GITHUB_WORKSPACE as string
   const baseDir = core.getInput('baseDir')
-  const modelsDir = path.join(baseDir, 'models')
+  const modelsDir = path.join(cwd, baseDir, 'models')
+  core.debug(`Loading the models directory: ${modelsDir}`)
+
   const modelFiles = fs.readdirSync(modelsDir)
+  core.debug(`Found ${modelFiles.length} models`)
 
   return Promise.all(modelFiles.map(async modelFile => {
     // Require the exported object
-    const modelFn = require(path.join(cwd, modelsDir, modelFile)) as ModelFn
+    const pathToModelFile = path.join(modelsDir, modelFile)
+    core.debug(`Requiring model file: ${pathToModelFile}`)
+    const modelFn = require(pathToModelFile) as ModelFn
     const model = modelFn({ Joi })
     
     // Create the model label
