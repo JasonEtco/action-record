@@ -30,7 +30,7 @@ This will tell ActionRecord to run a JavaScript file called `/action-record/even
 These should be JavaScript files that export a function that takes one argument, an instance of the [ActionRecord class](./src/action-record.ts):
 
 ```js
-module.exports = action => {
+module.exports = async action => {
   // Do stuff
 }
 ```
@@ -47,7 +47,7 @@ module.exports = ({ Joi }) => ({
 })
 
 // action-record/events/push.js
-module.exports = action => {
+module.exports = async action => {
   await action.models.user.create({
     login: action.event.payload.sender.login
   })
@@ -64,7 +64,7 @@ Need to query your "database"? No problem! Like most ORMs, each model gets `find
 
 ```js
 // action-record/events/push.js
-module.exports = action => {
+module.exports = async action => {
   await action.models.user.create({ login: 'JasonEtco' })
   const record = await action.models.user.findOne({ login: 'JasonEtco' })
   console.log(record)
