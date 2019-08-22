@@ -1,3 +1,4 @@
+import { Context } from '@actions/github/lib/context';
 import Model from './model';
 export default class ActionRecord {
     /**
@@ -6,5 +7,6 @@ export default class ActionRecord {
     models: {
         [key: string]: Model;
     };
+    context: Context;
     constructor();
 }

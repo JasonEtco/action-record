@@ -49,7 +49,7 @@ module.exports = ({ Joi }) => ({
 // action-record/events/push.js
 module.exports = async action => {
   await action.models.user.create({
-    login: action.event.payload.sender.login
+    login: action.context.payload.sender.login
   })
 }
 ```
