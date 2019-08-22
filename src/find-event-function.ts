@@ -1,13 +1,7 @@
 import fs from 'fs'
 import path from 'path'
+import isFunction from 'is-function'
 import * as core from '@actions/core'
-
-/**
- * Checks if the provided argument is a function
- */
-function isFunction (functionToCheck: Function) {
-  return functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
- }
 
 /**
  * Finds the relevant event file for a given event and returns the function
