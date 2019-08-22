@@ -3,7 +3,7 @@ import { Schema } from '@hapi/joi'
 import { IssuesCreateResponse } from '@octokit/rest'
 import uuid from 'uuid'
 import octokit from './octokit'
-import Instance from './instance'
+import Instance, { IssueRecord } from './instance'
 
 type HookFn = (opts: any) => Promise<void>
 
@@ -52,6 +52,22 @@ export default class Model {
     return issues.data.items
   }
 
+  private parseDataFromIssueBody (body: string): any {
+    const reg = /^`{3}\n([\s\S]+)\n`{3}/
+    const match = body.match(reg)
+    if (match && match[1]) return match[1]
+    return {}
+  }
+
+  private convertIssueToJson (issue: IssuesCreateResponse): IssueRecord {
+    const json = this.parseDataFromIssueBody(issue.body)
+    return {
+      ...json,
+      created_at: issue.created_at,
+      issue_number: issue.number
+    }
+  }
+
   /**
    * Find one record that matches the provided filter object.
    */
@@ -59,7 +75,8 @@ export default class Model {
     const issues = await this.searchForIssues()
     const whereStr = this.whereToStr(where)
     const found = issues.find(issue => (issue.body as string).includes(whereStr))
-    return new Instance(found)
+    if (found) return new Instance(this.convertIssueToJson(found))
+    return null
   }
 
   /**
@@ -70,9 +87,9 @@ export default class Model {
     if (where) {
       const whereStr = this.whereToStr(where)
       const found = issues.filter(issue => (issue.body as string).includes(whereStr))
-      return found.map(item => new Instance(item))
+      return found.map(item => new Instance(this.convertIssueToJson(item)))
     } else {
-      return issues.map(item => new Instance(item))
+      return issues.map(item => new Instance(this.convertIssueToJson(item)))
     }
   }
 
@@ -86,20 +103,24 @@ export default class Model {
     // Generate a UUID
     const id = uuid.v4()
 
+    const data = {
+      action_record_id: id,
+      ...opts
+    }
+
     // Create the new issue
     const newIssue = await octokit.issues.create({
       ...context.repo,
       title: `[${this.name}]: ${id}`,
-      body: JSON.stringify(opts, null, 2),
+      body: '```\n' + JSON.stringify(data, null, 2) + '\n```',
       labels: [this.name]
     })
 
     // Return the new instance
     return new Instance({
-      action_record_id: id,
+      ...data,
       created_at: newIssue.data.created_at,
-      issue_number: newIssue.data.number,
-      ...opts
+      issue_number: newIssue.data.number
     })
   }
 }

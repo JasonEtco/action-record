@@ -1,4 +1,4 @@
-interface IssueRecord {
+export interface IssueRecord {
   action_record_id: number
   created_at: string
   issue_number: number
