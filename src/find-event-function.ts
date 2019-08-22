@@ -10,9 +10,9 @@ function isFunction (functionToCheck: Function) {
  }
 
 /**
- * Finds the relevant file for a given 
+ * Finds the relevant event file for a given event and returns the function
  */
-export default function findFile (event: string) {
+export default function findEventFunction (event: string): Function | null {
   const baseDir = core.getInput('baseDir')
   const filename = core.getInput(`events.${event}`) || `${event}.js`
   const pathToFile = path.join(baseDir, 'events', filename)
