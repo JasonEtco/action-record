@@ -1,6 +1,6 @@
 import fs from 'fs'
 import path from 'path'
-import core from '@actions/core'
+import * as core from '@actions/core'
 
 /**
  * Checks if the provided argument is a function
