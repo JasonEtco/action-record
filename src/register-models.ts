@@ -21,6 +21,7 @@ export async function createModelLabel (name: string) {
       color: colorHash.hex(name)
     })
   } catch (err) {
+    core.debug(err.message)
     // TODO: Handle errors. If this throws because the label
     // already exists, ignore the error. Else, throw.
   }
