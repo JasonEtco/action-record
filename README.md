@@ -42,7 +42,7 @@ An example use-case is to store arbitrary data as issues, categorized by labels.
 module.exports = ({ Joi }) => ({
   name: 'user',
   schema: {
-    login: Joi.string().metadata({ unique: true })
+    login: Joi.string().meta({ unique: true })
   }
 })
 
@@ -84,7 +84,7 @@ module.exports = ({ Joi }) => ({
   schema: {
     login: Joi
       .string()
-      .metadata({ unique: true })
+      .meta({ unique: true })
   },
   hooks: {
     beforeCreate: async candidateRecord => {},
