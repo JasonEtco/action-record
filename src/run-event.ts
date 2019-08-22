@@ -1,4 +1,4 @@
-import github from '@actions/github'
+import { context } from '@actions/github'
 import ActionRecord from './action-record'
 import { registerModels } from './register-models'
 import findFile from './find-file'
@@ -9,7 +9,7 @@ export default async function runEvent () {
   // Register the models, setting actionRecord.models
   await registerModels(actionRecord)
   // Find the event function
-  const eventFn = findFile(github.context.eventName)
+  const eventFn = findFile(context.eventName)
   // Run it
   return eventFn(actionRecord)
 }

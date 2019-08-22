@@ -1,8 +1,8 @@
 import fs from 'fs'
 import path from 'path'
 import Joi from '@hapi/joi'
-import core from '@actions/core'
-import github from '@actions/github'
+import * as core from '@actions/core'
+import { context } from '@actions/github'
 import colorHash from 'color-hash'
 import ActionRecord from './action-record'
 import octokit from './octokit'
@@ -16,7 +16,7 @@ export async function createModelLabel (name: string) {
   // Create new label if it doesn't exist
   try {
     await octokit.issues.createLabel({
-      ...github.context.repo,
+      ...context.repo,
       name,
       color: colorHash.hex(name)
     })
