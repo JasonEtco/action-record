@@ -55,7 +55,7 @@ export default class Model {
   private parseDataFromIssueBody (body: string): any {
     const reg = /^`{3}\n([\s\S]+)\n`{3}/
     const match = body.match(reg)
-    if (match && match[1]) return match[1]
+    if (match && match[1]) return JSON.parse(match[1])
     return {}
   }
 
