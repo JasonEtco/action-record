@@ -3,7 +3,7 @@ FROM node:lts-alpine
 COPY package*.json ./
 
 # Install dependencies
-RUN npm ci
+RUN npm install --production
 
 # Copy the rest of your action's code
 COPY . .
