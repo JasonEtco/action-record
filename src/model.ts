@@ -1,4 +1,4 @@
-import github from '@actions/github'
+import { context } from '@actions/github'
 import { Schema } from '@hapi/joi'
 import { IssuesCreateResponse } from '@octokit/rest'
 import uuid from 'uuid'
@@ -88,7 +88,7 @@ export default class Model {
 
     // Create the new issue
     const newIssue = await octokit.issues.create({
-      ...github.context.repo,
+      ...context.repo,
       title: `[${this.name}]: ${id}`,
       body: JSON.stringify(opts, null, 2),
       labels: [this.name]
