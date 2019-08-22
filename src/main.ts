@@ -6,6 +6,7 @@ async function run () {
     core.debug('Running event')
     await runEvent()
   } catch (error) {
+    core.debug(error)
     core.setFailed(error.message)
   }
 }
