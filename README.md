@@ -39,13 +39,12 @@ An example use-case is to store arbitrary data as issues, categorized by labels.
 
 ```js
 // action-record/models/user.js
-const Joi = require('@hapi/joi')
-module.exports = {
+module.exports = ({ Joi }) => ({
   name: 'user',
   schema: {
     login: Joi.string().metadata({ unique: true })
   }
-}
+})
 
 // action-record/events/push.js
 module.exports = action => {
@@ -79,7 +78,7 @@ Models function similar to any other ORM; they require a name and a schema, and 
 
 ```js
 // action-record/models/user.js
-module.exports = {
+module.exports = ({ Joi }) => ({
   name: 'user'
   // A Joi schema that will be run to validate any new records
   schema: {
@@ -91,7 +90,7 @@ module.exports = {
     beforeCreate: async candidateRecord => {},
     afterCreate: async newRecord => {}
   }
-}
+})
 ```
 
 #### Available hooks

@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import Joi from '@hapi/joi'
 import core from '@actions/core'
 import github from '@actions/github'
 import colorHash from 'color-hash'
@@ -25,6 +26,8 @@ export async function createModelLabel (name: string) {
   }
 }
 
+type ModelFn = ({ Joi: Joi }) => ModelInput
+
 /**
  * Register all models in the `baseDir/models` folder.
  */
@@ -35,7 +38,8 @@ export async function registerModels (actionRecord: ActionRecord) {
 
   return Promise.all(modelFiles.map(async modelFile => {
     // Require the exported object
-    const model = require(path.join(modelsDir, modelFile)) as ModelInput
+    const modelFn = require(path.join(modelsDir, modelFile)) as ModelFn
+    const model = modelFn({ Joi })
     
     // Create the model label
     await createModelLabel(model.name)
