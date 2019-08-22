@@ -4,7 +4,6 @@
   ⚠️<strong>This is extremely WIP. Please don't use it or open issues just yet!</strong>⚠️
 </p>
 
-
 <p align="center">
   📑 An "ORM" for storing data in a GitHub repository using GitHub Actions<br>
   <a href="#usage">Usage</a> •
