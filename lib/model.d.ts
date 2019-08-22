@@ -27,10 +27,12 @@ export default class Model {
      * Call the search API to return all issues with this model's label.
      */
     private searchForIssues;
+    private parseDataFromIssueBody;
+    private convertIssueToJson;
     /**
      * Find one record that matches the provided filter object.
      */
-    findOne(where: any): Promise<Instance>;
+    findOne(where: any): Promise<Instance | null>;
     /**
      * Find all records that match the provided filter object.
      */
