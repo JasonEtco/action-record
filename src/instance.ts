@@ -1,3 +1,5 @@
+import Model from './model'
+
 export interface IssueRecord {
   action_record_id: number
   created_at: string
@@ -5,12 +7,15 @@ export interface IssueRecord {
   [key: string]: any
 }
 
-export default class Instance implements IssueRecord {
+export default class Instance<T> implements IssueRecord {
+  readonly model: Model
   readonly action_record_id: number
   readonly created_at: string
   readonly issue_number: number
 
-  constructor (issue_record: IssueRecord) {
+  constructor (model: Model, issue_record: IssueRecord) {
+    this.model = model
+
     const {
       action_record_id,
       created_at,
