@@ -32,11 +32,7 @@ export default class Instance {
     this.created_at = created_at
     this.issue_number = issue_number
 
-    for (const key in rest) {
-      Object.defineProperty(this, key, {
-        get: () => rest[key]
-      })
-    }
+    Object.assign(this, rest)
   }
 
   async destroy () {
