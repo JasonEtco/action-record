@@ -12,12 +12,12 @@ interface Hooks {
 export interface ModelInput {
     name: string;
     schema: Schema;
-    hooks: Hooks;
+    hooks?: Hooks;
 }
 export default class Model {
-    name: string;
-    schema: Schema;
-    hooks: Hooks;
+    readonly name: string;
+    readonly schema: Schema;
+    hooks?: Hooks;
     constructor(model: ModelInput);
     /**
      * Convert a `where` object to a string for proper searching.
@@ -41,5 +41,6 @@ export default class Model {
      * Create a new record
      */
     create(opts: any): Promise<Instance>;
+    static jsonToBody(data: any): string;
 }
 export {};
