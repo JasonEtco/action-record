@@ -90,5 +90,9 @@ describe('Model', () => {
       expect(newRecord.login).toBe('matchai')
       expect(newRecord).toMatchSnapshot()
     })
+
+    it('throws the expected error if the data object does not match the schema', async () => {
+      await expect(model.create({ foo: true })).rejects.toThrowErrorMatchingSnapshot()
+    })
   })
 })

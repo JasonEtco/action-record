@@ -10,6 +10,8 @@ Instance {
 }
 `;
 
+exports[`Model #create throws the expected error if the data object does not match the schema 1`] = `"\\"foo\\" is not allowed"`;
+
 exports[`Model #findOne returns the expected record 1`] = `
 Instance {
   "action_record_id": "29da0a67-062a-46f8-b397-7eac68513492",
