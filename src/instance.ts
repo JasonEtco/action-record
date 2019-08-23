@@ -1,16 +1,17 @@
+import { context } from '@actions/github'
 import Model from './model'
+import octokit from './octokit'
 
 export interface IssueRecord {
-  action_record_id: number
+  action_record_id: string
   created_at: string
   issue_number: number
-  destroy (): void
   [key: string]: any
 }
 
-export default class Instance implements IssueRecord {
+export default class Instance {
   readonly modelName: string
-  readonly action_record_id: number
+  readonly action_record_id: string
   readonly created_at: string
   readonly issue_number: number
 
@@ -39,6 +40,10 @@ export default class Instance implements IssueRecord {
   }
 
   async destroy () {
-    // TODO: Write code
+    return octokit.issues.update({
+      ...context.repo,
+      issue_number: this.issue_number,
+      state: 'closed'
+    })
   }
 }
