@@ -112,7 +112,7 @@ export default class Model {
     const newIssue = await octokit.issues.create({
       ...context.repo,
       title: `[${this.name}]: ${id}`,
-      body: '```\n' + JSON.stringify(data, null, 2) + '\n```',
+      body: Model.jsonToBody(data),
       labels: [this.name]
     })
 
@@ -122,5 +122,9 @@ export default class Model {
       created_at: newIssue.data.created_at,
       issue_number: newIssue.data.number
     })
+  }
+
+  static jsonToBody (data: any) {
+    return '```\n' + JSON.stringify(data, null, 2) + '\n```'
   }
 }
