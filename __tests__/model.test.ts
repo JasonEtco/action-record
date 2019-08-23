@@ -3,10 +3,6 @@ import nock from 'nock'
 import Model from '../src/model'
 import Instance from '../src/instance'
 
-interface UserModel {
-  login: string
-}
-
 describe('Model', () => {
   let model: Model
 
@@ -24,16 +20,14 @@ describe('Model', () => {
           number: 1,
           labels: [{ name: model.name }],
           created_at: '2009-07-12T20:10:41Z',
-          body: '```\n{\n  "action_id": "some-string",\n  "login": "JasonEtco"\n}\n```'
+          body: '```\n{\n  "action_record_id": "some-string",\n  "login": "JasonEtco"\n}\n```'
         }]
       })
   })
 
   describe('#findOne', () => {
     it('returns the expected record', async () => {
-      const record = await model.findOne<UserModel>({
-        login: 'JasonEtco'
-      })
+      const record = await model.findOne({ login: 'JasonEtco' }) as Instance
 
       expect(record).toBeInstanceOf(Instance)
       expect(record.login).toBe('JasonEtco')

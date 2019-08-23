@@ -4,17 +4,21 @@ export interface IssueRecord {
   action_record_id: number
   created_at: string
   issue_number: number
+  destroy (): void
   [key: string]: any
 }
 
-export default class Instance<T> implements IssueRecord {
-  readonly model: Model
+export default class Instance implements IssueRecord {
+  readonly modelName: string
   readonly action_record_id: number
   readonly created_at: string
   readonly issue_number: number
 
+  // Index signature
+  [key: string]: any
+
   constructor (model: Model, issue_record: IssueRecord) {
-    this.model = model
+    this.modelName = model.name
 
     const {
       action_record_id,

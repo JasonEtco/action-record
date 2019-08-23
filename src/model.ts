@@ -19,13 +19,13 @@ interface Hooks {
 export interface ModelInput {
   name: string
   schema: Schema
-  hooks: Hooks
+  hooks?: Hooks
 }
 
 export default class Model {
-  public name: string
-  public schema: Schema
-  public hooks: Hooks
+  readonly name: string
+  readonly schema: Schema
+  public hooks?: Hooks
 
   constructor (model: ModelInput) {
     this.name = model.name
@@ -75,7 +75,7 @@ export default class Model {
     const issues = await this.searchForIssues()
     const whereStr = this.whereToStr(where)
     const found = issues.find(issue => (issue.body as string).includes(whereStr))
-    if (found) return new Instance(this.convertIssueToJson(found))
+    if (found) return new Instance(this, this.convertIssueToJson(found))
     return null
   }
 
@@ -87,9 +87,9 @@ export default class Model {
     if (where) {
       const whereStr = this.whereToStr(where)
       const found = issues.filter(issue => (issue.body as string).includes(whereStr))
-      return found.map(item => new Instance(this.convertIssueToJson(item)))
+      return found.map(item => new Instance(this, this.convertIssueToJson(item)))
     } else {
-      return issues.map(item => new Instance(this.convertIssueToJson(item)))
+      return issues.map(item => new Instance(this, this.convertIssueToJson(item)))
     }
   }
 
@@ -117,7 +117,7 @@ export default class Model {
     })
 
     // Return the new instance
-    return new Instance({
+    return new Instance(this, {
       ...data,
       created_at: newIssue.data.created_at,
       issue_number: newIssue.data.number
