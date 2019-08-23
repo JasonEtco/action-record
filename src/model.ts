@@ -47,7 +47,7 @@ export default class Model {
   private async searchForIssues (): Promise<IssuesCreateResponse[]> {
     // Search for issues by this label
     const issues = await octokit.search.issuesAndPullRequests({
-      q: `is:issue label:${this.name}`
+      q: `is:issue is:open label:${this.name}`
     })
     return issues.data.items
   }
