@@ -9,7 +9,7 @@
     "action-record": "bin/index.js"
   },
   "scripts": {
-    "build": "ncc build ./src/index.ts -o dist",
+    "build": "npx ncc build ./src/index.ts -o dist",
     "test": "jest",
     "prepublishOnly": "npm run build"
   },
