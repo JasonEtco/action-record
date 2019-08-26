@@ -34,7 +34,7 @@ type ModelFn = (opts: { Joi: typeof Joi }) => ModelInput
  */
 export async function registerModels (actionRecord: ActionRecord) {
   const cwd = process.env.GITHUB_WORKSPACE as string
-  const baseDir = core.getInput('baseDir')
+  const baseDir = core.getInput('baseDir') || 'action-record'
   const modelsDir = path.join(cwd, baseDir, 'models')
   core.debug(`Loading the models directory: ${modelsDir}`)
 

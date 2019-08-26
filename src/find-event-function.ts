@@ -8,7 +8,7 @@ import * as core from '@actions/core'
  */
 export default function findEventFunction (event: string): Function | null {
   const cwd = process.env.GITHUB_WORKSPACE as string
-  const baseDir = core.getInput('baseDir')
+  const baseDir = core.getInput('baseDir') || 'action-record'
   const filename = core.getInput(`events.${event}`) || `${event}.js`
   const pathToFile = path.join(cwd, baseDir, 'events', filename)
 
