@@ -1,7 +1,6 @@
 {
   "name": "action-record",
-  "version": "0.0.0",
-  "private": true,
+  "version": "0.0.1",
   "description": "The GitHub Actions ORM",
   "main": "dist/index.js",
   "module": "dist/action-record.esm.js",
