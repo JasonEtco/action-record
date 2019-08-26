@@ -1,10 +1,10 @@
-name: 'ActionRecord'
-description: 'The GitHub Actions ORM'
-author: 'JasonEtco'
+name: ActionRecord
+description: The GitHub Actions ORM
+author: JasonEtco
 inputs: 
   baseDir:
-    description: 'The base directory of the ActionRecord files'
-    default: 'action-record'
+    description: The base directory of the ActionRecord files
+    default: action-record
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: docker
+  image: Dockerfile
