@@ -6,7 +6,7 @@
   "module": "dist/action-record.esm.js",
   "typings": "dist/index.d.ts",
   "bin": {
-    "action-record": "dist/index.js"
+    "action-record": "bin/index.js"
   },
   "scripts": {
     "build": "ncc build ./src/index.ts -o dist",
@@ -17,13 +17,11 @@
     "type": "git",
     "url": "git+https://github.com/JasonEtco/action-record.git"
   },
-  "publishConfig": {
-    "@jasonetco:registry": "https://npm.pkg.github.com/",
-    "registry": "https://npm.pkg.github.com/"
-  },
   "files": [
     "dist",
-    "package.json"
+    "bin",
+    "package.json",
+    "LICENSE"
   ],
   "keywords": [
     "actions",
