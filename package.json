@@ -1,6 +1,6 @@
 {
   "name": "@jasonetco/action-record",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "The GitHub Actions ORM",
   "main": "dist/index.js",
   "module": "dist/action-record.esm.js",
@@ -11,7 +11,7 @@
   "scripts": {
     "build": "ncc build ./src/index.ts -o dist",
     "test": "jest",
-    "prepublishOnly": "npm run build -- -m"
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
