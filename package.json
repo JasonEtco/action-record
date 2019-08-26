@@ -10,7 +10,8 @@
   },
   "scripts": {
     "build": "ncc build ./src/index.ts -o dist",
-    "test": "jest"
+    "test": "jest",
+    "prepublishOnly": "npm run build -- -m"
   },
   "repository": {
     "type": "git",
