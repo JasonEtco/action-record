@@ -1,10 +1,13 @@
 {
   "name": "@jasonetco/action-record",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "The GitHub Actions ORM",
   "main": "dist/index.js",
   "module": "dist/action-record.esm.js",
   "typings": "dist/index.d.ts",
+  "bin": {
+    "action-record": "dist/index.js"
+  },
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
