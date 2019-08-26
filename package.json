@@ -1,6 +1,6 @@
 {
   "name": "@jasonetco/action-record",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "The GitHub Actions ORM",
   "main": "dist/index.js",
   "module": "dist/action-record.esm.js",
@@ -18,12 +18,12 @@
     "url": "git+https://github.com/JasonEtco/action-record.git"
   },
   "publishConfig": {
-    "access": "restricted",
-    "@github:registry": "https://npm.pkg.github.com/",
+    "@jasonetco:registry": "https://npm.pkg.github.com/",
     "registry": "https://npm.pkg.github.com/"
   },
   "files": [
-    "dist"
+    "dist",
+    "package.json"
   ],
   "keywords": [
     "actions",
