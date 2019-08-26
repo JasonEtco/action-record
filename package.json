@@ -9,9 +9,8 @@
     "action-record": "dist/index.js"
   },
   "scripts": {
-    "start": "tsdx watch",
-    "build": "tsdx build",
-    "test": "tsdx test"
+    "build": "ncc build ./src/index.ts -o dist",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -49,11 +48,33 @@
     "@types/nock": "^10.0.3",
     "@types/node": "^12.0.4",
     "@types/uuid": "^3.4.5",
+    "@zeit/ncc": "^0.20.4",
     "jest": "^24.8.0",
     "nock": "^10.0.6",
     "ts-jest": "^24.0.2",
-    "tsdx": "^0.8.0",
     "tslib": "^1.10.0",
     "typescript": "^3.5.1"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "<rootDir>/dist/"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "js",
+      "json"
+    ],
+    "transform": {
+      ".+\\.tsx?$": "ts-jest"
+    },
+    "testMatch": [
+      "<rootDir>/tests/**/*.test.(ts|js)"
+    ],
+    "globals": {
+      "ts-jest": {
+        "babelConfig": false
+      }
+    }
   }
 }
