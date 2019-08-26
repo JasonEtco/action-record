@@ -1,6 +1,6 @@
 {
   "name": "@jasonetco/action-record",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "The GitHub Actions ORM",
   "main": "dist/index.js",
   "module": "dist/action-record.esm.js",
