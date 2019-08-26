@@ -1,7 +1,6 @@
 FROM node:lts-alpine
 
-# Install dependencies
-RUN npm install -g @jasonetco/action-record --registry https://npm.pkg.github.com/
-
-# Run `node /index.js`
-ENTRYPOINT ["action-record"]
+# Weird hack to install and run the library
+RUN npm init -y
+RUN npm install @jasonetco/action-record
+ENTRYPOINT ["node", "/node_modules/.bin/@jasonetco/action-record/dist"]
