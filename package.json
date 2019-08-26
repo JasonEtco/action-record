@@ -3,7 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "description": "The GitHub Actions ORM",
-  "main": "lib/main.js",
+  "main": "dist/index.js",
+  "module": "dist/action-record.esm.js",
+  "typings": "dist/index.d.ts",
   "scripts": {
     "start": "tsdx watch",
     "build": "tsdx build",
@@ -11,8 +13,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/node12-template.git"
+    "url": "git+https://github.com/JasonEtco/action-record.git"
   },
+  "files": [
+    "dist"
+  ],
   "keywords": [
     "actions",
     "node",
