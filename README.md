@@ -56,7 +56,8 @@ module.exports = async action => {
 
 This will create a new issue with a label `user`:
 
-<IMAGE OF NEW `USER` ISSUE>
+<img width="1039" alt="image" src="https://user-images.githubusercontent.com/10660468/64402169-e54d2280-d041-11e9-813f-3dd2e785a455.png">
+<br />
 
 ## Querying for data
 
