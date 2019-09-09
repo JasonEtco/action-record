@@ -105,6 +105,27 @@ afterSave
 afterCreate
 ```
 
+A common use-case might be to validate that a record doesn't already exist:
+
+```js
+// action-record/models/user.js
+module.exports = ({ Joi, github }) => ({
+  name: 'user'
+  // A Joi schema that will be run to validate any new records
+  schema: {
+    login: Joi.string()
+  },
+  hooks: {
+    async beforeCreate (candidateRecord) {
+      const existingRecord = await this.findOne({ login: candidateRecord.login })
+      if (existingRecord) {
+        throw new Error(`User with ${existingRecord.login} already exists!`)
+      }
+    },
+  }
+})
+```
+
 ### Options
 
 ```yml
