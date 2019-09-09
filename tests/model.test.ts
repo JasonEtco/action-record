@@ -102,14 +102,23 @@ describe('Model', () => {
         afterCreate: jest.fn()
       }
 
-      model.hooks = hooks
+      model.registerHook('beforeCreate', hooks.beforeCreate)
+      model.registerHook('afterCreate', hooks.afterCreate)
 
       // Create the record
       jest.spyOn(uuid, 'v4').mockReturnValueOnce('new-uuid')
       await model.create({ login: 'matchai' })
 
+      // Verify that beforeCreate was called correctly
       expect(hooks.beforeCreate).toHaveBeenCalled()
+      expect(hooks.beforeCreate).toHaveBeenCalledTimes(1)
+      expect(hooks.beforeCreate.mock.calls[0][0]).toEqual({ login: 'matchai' })
+
+      // Verify that afterCreate was called correctly
       expect(hooks.afterCreate).toHaveBeenCalled()
+      expect(hooks.afterCreate).toHaveBeenCalledTimes(1)
+      expect(hooks.afterCreate.mock.calls[0][0]).toBeInstanceOf(Instance)
+      expect(hooks.afterCreate.mock.calls[0][0]).toMatchSnapshot()
     })
   })
 })

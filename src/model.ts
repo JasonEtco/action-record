@@ -1,6 +1,7 @@
 import { context } from '@actions/github'
 import { Schema } from '@hapi/joi'
 import { IssuesCreateResponse } from '@octokit/rest'
+import { Hook, HookSingular } from 'before-after-hook'
 import uuid from 'uuid'
 import octokit from './octokit'
 import Instance, { IssueRecord } from './instance'
@@ -19,18 +20,31 @@ interface Hooks {
 export interface ModelInput {
   name: string
   schema: Schema
-  hooks?: Hooks
 }
 
 export default class Model {
   readonly name: string
   readonly schema: Schema
-  public hooks: Hooks
+  private hooks: { [key: string]: HookSingular<any, any, any> }
 
   constructor (model: ModelInput) {
     this.name = model.name
     this.schema = model.schema
-    this.hooks = model.hooks || {}
+
+    this.hooks = {
+      create: new Hook.Singular()
+    }
+  }
+
+  public registerHook (hookName: keyof Hooks, hookFn: HookFn) {
+    const map: { [key in keyof Hooks]: Function } = {
+      beforeCreate: this.hooks.create.before,
+      afterCreate: this.hooks.create.after,
+    }
+
+    const hookRegisterer = map[hookName]
+    if (!hookRegisterer) throw new Error(`${hookName} is not a valid hook.`)
+    return hookRegisterer(hookFn)
   }
 
   /**
@@ -97,38 +111,33 @@ export default class Model {
    * Create a new record
    */
   async create (opts: any): Promise<Instance> {
-    // Call the beforeCreate hook
-    if (this.hooks.beforeCreate) await this.hooks.beforeCreate(opts)
-
-    // Validate the provided object against the model's schema
-    await this.schema.validate(opts)
-
-    // Generate a UUID
-    const id = uuid.v4()
-
-    const data = {
-      action_record_id: id,
-      ...opts
-    }
-
-    // Create the new issue
-    const newIssue = await octokit.issues.create({
-      ...context.repo,
-      title: `[${this.name}]: ${id}`,
-      body: Model.jsonToBody(data),
-      labels: [this.name]
-    })
-
-    // Return the new instance
-    const newInstance = new Instance(this, {
-      ...data,
-      created_at: newIssue.data.created_at,
-      issue_number: newIssue.data.number
-    })
-
-    // Call the afterCreate hook
-    if (this.hooks.afterCreate) await this.hooks.afterCreate(newInstance)
-    return newInstance
+    return this.hooks.create(async () => {
+      // Validate the provided object against the model's schema
+      await this.schema.validate(opts)
+  
+      // Generate a UUID
+      const id = uuid.v4()
+  
+      const data = {
+        action_record_id: id,
+        ...opts
+      }
+  
+      // Create the new issue
+      const newIssue = await octokit.issues.create({
+        ...context.repo,
+        title: `[${this.name}]: ${id}`,
+        body: Model.jsonToBody(data),
+        labels: [this.name]
+      })
+  
+      // Return the new instance
+      return new Instance(this, {
+        ...data,
+        created_at: newIssue.data.created_at,
+        issue_number: newIssue.data.number
+      })
+    }, opts)
   }
 
   static jsonToBody (data: any) {
