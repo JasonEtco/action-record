@@ -32,7 +32,9 @@ export default class Model {
     this.schema = model.schema
 
     this.hooks = {
-      create: new Hook.Singular()
+      create: new Hook.Singular(),
+      validate: new Hook.Singular(),
+      save: new Hook.Singular()
     }
   }
 
@@ -40,6 +42,10 @@ export default class Model {
     const map: { [key in keyof Hooks]: Function } = {
       beforeCreate: this.hooks.create.before,
       afterCreate: this.hooks.create.after,
+      beforeValidate: this.hooks.validate.after,
+      afterValidate: this.hooks.validate.after,
+      beforeSave: this.hooks.save.after,
+      afterSave: this.hooks.save.after,
     }
 
     const hookRegisterer = map[hookName]
@@ -111,32 +117,38 @@ export default class Model {
    * Create a new record
    */
   async create (opts: any): Promise<Instance> {
-    return this.hooks.create(async () => {
+    return this.hooks.validate(async () => {
       // Validate the provided object against the model's schema
       await this.schema.validate(opts)
-  
-      // Generate a UUID
-      const id = uuid.v4()
-  
-      const data = {
-        action_record_id: id,
-        ...opts
-      }
-  
-      // Create the new issue
-      const newIssue = await octokit.issues.create({
-        ...context.repo,
-        title: `[${this.name}]: ${id}`,
-        body: Model.jsonToBody(data),
-        labels: [this.name]
-      })
-  
-      // Return the new instance
-      return new Instance(this, {
-        ...data,
-        created_at: newIssue.data.created_at,
-        issue_number: newIssue.data.number
-      })
+
+      // Actually go to create the record
+      return this.hooks.create(async () => {
+        // Generate a UUID
+        const id = uuid.v4()
+    
+        const data = {
+          action_record_id: id,
+          ...opts
+        }
+    
+        // Save the new record to GitHub
+        return this.hooks.save(async () => {
+          // Create the new issue
+          const newIssue = await octokit.issues.create({
+            ...context.repo,
+            title: `[${this.name}]: ${id}`,
+            body: Model.jsonToBody(data),
+            labels: [this.name]
+          })
+      
+          // Return the new instance
+          return new Instance(this, {
+            ...data,
+            created_at: newIssue.data.created_at,
+            issue_number: newIssue.data.number
+          })
+        }, opts)
+      }, opts)
     }, opts)
   }
 
