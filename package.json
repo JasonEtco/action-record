@@ -35,28 +35,28 @@
   "author": "JasonEtco",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.0.0",
-    "@actions/github": "^1.0.0",
+    "@actions/core": "^1.1.0",
+    "@actions/github": "^1.1.0",
     "@hapi/joi": "^15.1.1",
-    "@octokit/rest": "^16.28.7",
+    "@octokit/rest": "^16.28.9",
     "before-after-hook": "^2.1.0",
     "color-hash": "^1.0.3",
     "is-function": "^1.0.1",
     "uuid": "^3.3.3"
   },
   "devDependencies": {
-    "@types/hapi__joi": "^15.0.3",
+    "@types/hapi__joi": "^15.0.4",
     "@types/is-function": "^1.0.0",
-    "@types/jest": "^24.0.13",
+    "@types/jest": "^24.0.18",
     "@types/nock": "^10.0.3",
-    "@types/node": "^12.0.4",
+    "@types/node": "^12.7.4",
     "@types/uuid": "^3.4.5",
     "@zeit/ncc": "^0.20.4",
-    "jest": "^24.8.0",
-    "nock": "^10.0.6",
+    "jest": "^24.9.0",
+    "nock": "^11.3.3",
     "ts-jest": "^24.0.2",
     "tslib": "^1.10.0",
-    "typescript": "^3.5.1"
+    "typescript": "^3.6.2"
   },
   "jest": {
     "testEnvironment": "node",
