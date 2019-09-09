@@ -26,20 +26,21 @@ export default class Model {
   readonly name: string
   readonly schema: Schema
   private hooks: { [key: string]: HookSingular<any, any, any> }
+  private hookMap: { [key in keyof Hooks]: Function }
 
   constructor (model: ModelInput) {
     this.name = model.name
     this.schema = model.schema
 
+    // An object of Hook instances
     this.hooks = {
       create: new Hook.Singular(),
       validate: new Hook.Singular(),
       save: new Hook.Singular()
     }
-  }
 
-  public registerHook (hookName: keyof Hooks, hookFn: HookFn) {
-    const map: { [key in keyof Hooks]: Function } = {
+    // A map of hook names to actual setters
+    this.hookMap = {
       beforeCreate: this.hooks.create.before,
       afterCreate: this.hooks.create.after,
       beforeValidate: this.hooks.validate.after,
@@ -47,8 +48,13 @@ export default class Model {
       beforeSave: this.hooks.save.after,
       afterSave: this.hooks.save.after,
     }
+  }
 
-    const hookRegisterer = map[hookName]
+  /**
+   * Set a before or after hook for an operation.
+   */
+  public registerHook (hookName: keyof Hooks, hookFn: HookFn) {
+    const hookRegisterer = this.hookMap[hookName]
     if (!hookRegisterer) throw new Error(`${hookName} is not a valid hook.`)
     return hookRegisterer(hookFn)
   }
