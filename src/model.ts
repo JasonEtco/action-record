@@ -25,12 +25,12 @@ export interface ModelInput {
 export default class Model {
   readonly name: string
   readonly schema: Schema
-  public hooks?: Hooks
+  public hooks: Hooks
 
   constructor (model: ModelInput) {
     this.name = model.name
     this.schema = model.schema
-    this.hooks = model.hooks
+    this.hooks = model.hooks || {}
   }
 
   /**
@@ -97,6 +97,9 @@ export default class Model {
    * Create a new record
    */
   async create (opts: any): Promise<Instance> {
+    // Call the beforeCreate hook
+    if (this.hooks.beforeCreate) await this.hooks.beforeCreate(opts)
+
     // Validate the provided object against the model's schema
     await this.schema.validate(opts)
 
@@ -117,11 +120,15 @@ export default class Model {
     })
 
     // Return the new instance
-    return new Instance(this, {
+    const newInstance = new Instance(this, {
       ...data,
       created_at: newIssue.data.created_at,
       issue_number: newIssue.data.number
     })
+
+    // Call the afterCreate hook
+    if (this.hooks.afterCreate) await this.hooks.afterCreate(newInstance)
+    return newInstance
   }
 
   static jsonToBody (data: any) {
