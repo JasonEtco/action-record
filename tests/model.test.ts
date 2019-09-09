@@ -94,5 +94,22 @@ describe('Model', () => {
     it('throws the expected error if the data object does not match the schema', async () => {
       await expect(model.create({ foo: true })).rejects.toThrowErrorMatchingSnapshot()
     })
+
+    it('calls the expected hooks', async () => {
+      // Register the hooks
+      const hooks = {
+        beforeCreate: jest.fn(),
+        afterCreate: jest.fn()
+      }
+
+      model.hooks = hooks
+
+      // Create the record
+      jest.spyOn(uuid, 'v4').mockReturnValueOnce('new-uuid')
+      await model.create({ login: 'matchai' })
+
+      expect(hooks.beforeCreate).toHaveBeenCalled()
+      expect(hooks.afterCreate).toHaveBeenCalled()
+    })
   })
 })
