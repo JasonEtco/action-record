@@ -75,7 +75,7 @@ module.exports = async action => {
 
 ### Models
 
-Models function similar to any other ORM; they require a name and a schema, and can define "hooks":
+Models function similar to any other ORM; they require a name and a schema (here, using [Joi](https://github.com/hapijs/joi)). You can even define "hooks":
 
 ```js
 // action-record/models/user.js
@@ -83,9 +83,7 @@ module.exports = ({ Joi }) => ({
   name: 'user'
   // A Joi schema that will be run to validate any new records
   schema: {
-    login: Joi
-      .string()
-      .meta({ unique: true })
+    login: Joi.string()
   },
   hooks: {
     beforeCreate: async candidateRecord => {},
