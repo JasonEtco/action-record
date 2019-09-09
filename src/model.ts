@@ -54,6 +54,7 @@ export default class Model {
     if (model.hooks) {
       for (const key in model.hooks) {
         const hookFn = model.hooks[key as keyof Hooks]
+        if (!hookFn) throw new Error(`No hook function for ${key} was provided`)
         this.registerHook(key as keyof Hooks, hookFn)
       }
     }
@@ -62,10 +63,10 @@ export default class Model {
   /**
    * Set a before or after hook for an operation.
    */
-  public registerHook (hookName: keyof Hooks, hookFn?: HookFn) {
+  public registerHook (hookName: keyof Hooks, hookFn: HookFn) {
     const hookRegisterer = this.hookMap[hookName]
     if (!hookRegisterer) throw new Error(`${hookName} is not a valid hook.`)
-    return hookRegisterer(hookFn)
+    return hookRegisterer(hookFn.bind(this))
   }
 
   /**
