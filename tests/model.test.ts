@@ -120,5 +120,33 @@ describe('Model', () => {
       expect(hooks.afterCreate.mock.calls[0][0]).toBeInstanceOf(Instance)
       expect(hooks.afterCreate.mock.calls[0][0]).toMatchSnapshot()
     })
+
+    it('calls the expected hooks when the hooks were provided in the constructor', async () => {
+      // Register the hooks
+      const hooks = {
+        beforeCreate: jest.fn(),
+        afterCreate: jest.fn()
+      }
+
+      model = new Model({
+        name: 'user',
+        schema: Joi.object({
+          login: Joi.string()
+        }),
+        hooks
+      })
+
+      // Create the record
+      jest.spyOn(uuid, 'v4').mockReturnValueOnce('new-uuid')
+      await model.create({ login: 'matchai' })
+
+      // Verify that beforeCreate was called correctly
+      expect(hooks.beforeCreate).toHaveBeenCalled()
+      expect(hooks.beforeCreate).toHaveBeenCalledTimes(1)
+
+      // Verify that afterCreate was called correctly
+      expect(hooks.afterCreate).toHaveBeenCalled()
+      expect(hooks.afterCreate).toHaveBeenCalledTimes(1)
+    })
   })
 })
